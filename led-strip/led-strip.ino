@@ -5,20 +5,25 @@ const int ledPin = 3;
 const int trigPin = 8;
 const int echoPin = 9;
 const int lightSensorPin = A1;
+const int fsrPin = A0;
 int reading;
 int btnState;
 int lightValue;
 int result;
+int mode;
 
 int ledState = HIGH;        // the current state of the output pin
 int buttonState;            // the current reading from the input pin
 int lastButtonState = LOW;  // the previous reading from the input pin
+int buttonPresses;
 
 // the following variables are unsigned longs because the time, measured in
 // milliseconds, will quickly become a bigger number than can be stored in an int.
 unsigned long lastDebounceTime = 0;  // the last time the output pin was toggled
 unsigned long debounceDelay = 50;  
+int fsrReading;
 long duration, cm;
+
 
 void setup(){
     pinMode(ledPin, OUTPUT);
@@ -59,6 +64,10 @@ void loop(){
     duration = pulseIn(echoPin, HIGH);
     cm = (duration / 2) /29.1;
 
+    fsrReading = analogRead(fsrPin);
+
+    //Serial.println(fsrReading);
+
     if (reading != lastButtonState) {
     // reset the debouncing timer
         lastDebounceTime = millis();
@@ -70,7 +79,9 @@ void loop(){
             buttonState = reading;
             if (buttonState == HIGH) {
                 ledState = !ledState;
+                buttonPresses++;
                 result = addTwoInts(3, buttonState);
+                Serial.println(buttonPresses);
             }
             Serial.print("Distance: ");
             Serial.print(cm);
@@ -79,13 +90,30 @@ void loop(){
         }
     }
 
+    mode = (buttonPresses % 3);
+
+    if (mode == 0) {
+        if (fsrReading < 500){
+            digitalWrite(ledPin, LOW);
+        } else {
+            digitalWrite(ledPin, HIGH);
+        }
+    } else if (mode == 1) {
+        if (cm > 10){
+            digitalWrite(ledPin, LOW);
+        } else {
+            digitalWrite(ledPin, HIGH);
+        }
+    } else if (mode == 2) {
+        if (lightValue > 300){
+            digitalWrite(ledPin, LOW);
+        } else {
+            digitalWrite(ledPin, HIGH);
+        }
+    }
+
     
     // set the LED:
-    if (lightValue < 300){
-        digitalWrite(ledPin, LOW);
-    } else {
-        digitalWrite(ledPin, ledState);
-    }
     
 
     // save the reading. Next time through the loop, it'll be the lastButtonState:
