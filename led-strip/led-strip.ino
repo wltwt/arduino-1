@@ -1,7 +1,9 @@
 const int btnPin = 4;
 const int ledPin = 3;
+const int lightSensorPin = A1;
 int reading;
 int btnState;
+int lightValue;
 
 int ledState = HIGH;        // the current state of the output pin
 int buttonState;            // the current reading from the input pin
@@ -15,14 +17,16 @@ unsigned long debounceDelay = 50;
 void setup(){
     pinMode(ledPin, OUTPUT);
     pinMode(btnPin, INPUT);
-    Serial.begin(9600);
+    pinMode(lightSensorPin, INPUT);
     digitalWrite(ledPin, ledState);
+    Serial.begin(9600);
 }
 
 void loop(){
     static int prevTime = 0;
     reading = digitalRead(btnPin);
-    Serial.println("for git");
+    lightValue = analogRead(lightSensorPin);
+    // Serial.println("for git");
 
     // if (millis() - prevTime > 1000){
         // prevTime = millis();
@@ -52,8 +56,15 @@ void loop(){
         }
     }
 
+    
     // set the LED:
-    digitalWrite(ledPin, ledState);
+    if (lightValue < 300){
+        digitalWrite(ledPin, LOW);
+    } else {
+        
+        digitalWrite(ledPin, ledState);
+    }
+    
 
     // save the reading. Next time through the loop, it'll be the lastButtonState:
     lastButtonState = reading;
