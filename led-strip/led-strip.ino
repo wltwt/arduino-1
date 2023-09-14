@@ -1,9 +1,12 @@
+#include "buttons.h"
+
 const int btnPin = 4;
 const int ledPin = 3;
 const int lightSensorPin = A1;
 int reading;
 int btnState;
 int lightValue;
+int result;
 
 int ledState = HIGH;        // the current state of the output pin
 int buttonState;            // the current reading from the input pin
@@ -52,7 +55,9 @@ void loop(){
             buttonState = reading;
             if (buttonState == HIGH) {
                 ledState = !ledState;
+                result = addTwoInts(3, buttonState);
             }
+            Serial.println(result);
         }
     }
 
@@ -61,7 +66,6 @@ void loop(){
     if (lightValue < 300){
         digitalWrite(ledPin, LOW);
     } else {
-        
         digitalWrite(ledPin, ledState);
     }
     
