@@ -1,5 +1,7 @@
+#include "Arduino.h"
 #include "buttons.h"
-
-int addTwoInts(int a, int b) {
-    return a + b;
-}
+ 
+buttons::buttons(int pin){
+    pinMode(pin, OUTPUT);
+    _pin = pin;
+ }

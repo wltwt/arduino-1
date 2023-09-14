@@ -2,7 +2,16 @@
 #define BUTTONS_H
 
 #include <Arduino.h>
+class buttons
+{
+private:
+    /* data */
+    int _pin;
 
-int addTwoInts(int a, int b);
+public:
+    buttons(int pin);
+    void test();
+    // ~buttons();
+};
 
 #endif

@@ -1,5 +1,3 @@
-#include "buttons.h"
-
 const int btnPin = 4;
 const int ledPin = 3;
 const int trigPin = 8;
@@ -61,7 +59,7 @@ void loop(){
     digitalWrite(trigPin, LOW);
 
     pinMode(echoPin, INPUT);
-    duration = pulseIn(echoPin, HIGH);
+    duration = pulseIn(echoPin, HIGH, 100);
     cm = (duration / 2) /29.1;
 
     fsrReading = analogRead(fsrPin);
@@ -78,7 +76,7 @@ void loop(){
         if (reading != buttonState) {
             buttonState = reading;
             if (buttonState == HIGH) {
-                //ledState = !ledState;
+                ledState = !ledState;
                 buttonPresses++;
                 Serial.println(buttonPresses);
             }
@@ -92,25 +90,24 @@ void loop(){
     mode = (buttonPresses % 3);
 
     if (mode == 0) {
-        if (fsrReading < 500) {
-            ledState = LOW;
+        if (fsrReading < 500){
+            digitalWrite(ledPin, LOW);
         } else {
-            ledState = HIGH;
+            digitalWrite(ledPin, HIGH);
         }
     } else if (mode == 1) {
         if (cm > 10){
-            ledState = LOW;
+            digitalWrite(ledPin, LOW);
         } else {
-            ledState = HIGH;
+            digitalWrite(ledPin, HIGH);
         }
     } else if (mode == 2) {
         if (lightValue > 300){
-            ledState = LOW;
+            digitalWrite(ledPin, LOW);
         } else {
-            ledState = HIGH;
+            digitalWrite(ledPin, HIGH);
         }
     }
-    digitalWrite(ledPin, ledState);
 
     
     // set the LED:
