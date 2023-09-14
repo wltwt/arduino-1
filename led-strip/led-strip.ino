@@ -22,6 +22,7 @@ void setup(){
 void loop(){
     static int prevTime = 0;
     reading = digitalRead(btnPin);
+    Serial.println("for git");
 
     // if (millis() - prevTime > 1000){
         // prevTime = millis();
