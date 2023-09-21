@@ -5,3 +5,7 @@ buttons::buttons(int pin){
     pinMode(pin, OUTPUT);
     _pin = pin;
  }
+
+ int test(){
+    return 1;
+ } 
